@@ -75,18 +75,15 @@ def max_price_of_tickers():
     pass
 
 
-def decide_order_ticker(ticker, ts, ready):
+def decide_order_ticker(ticker, ts, ready,minprice,maxprice):
     global openOrders
 
     if ready and not openOrders.get("buy") and not openOrders.get("sell") and c.enable_buys:
         try:
-            price = min_price_of_tickers()
-
-            maxprice = min_price_of_tickers()
             if(maxprice-minprice<maxprice*c.minimum_domain_percent_on_observed_tickers*maxprice):
-                     print(f"Domain on observed time is less than {c.minimum_domain_percent_on_observed_tickers*100}%, preventing any buy to be placed")
+                     print(f"Domain on observed time is less than {c.minimum_domain_percent_on_observed_tickers*100}%, preventing any buy to be placed - Domain: {minprice-maxprice}/{maxprice}")
                      return;
-
+            price=minprice
             print("Adding buy order: No open order either at sell or buy")
             client.watch({
                 "event": "addOrder",
@@ -199,15 +196,16 @@ def on_ticker(message):
             print("Ready state changed to", ready_tmp)
         ready = ready_tmp
         ticker_history = [a_ticker for a_ticker in ticker_history if a_ticker["time"] > ts - c.time_to_watch]
+        minprice, maxprice = [min_price_of_tickers(), max_price_of_tickers()]
+
         if ready:
-            decide_order_ticker(ticker, ts, ready)
+            decide_order_ticker(ticker, ts, ready,minprice,maxprice)
         else:
             ready_time = int(ticker_history[0].get("time") + c.time_to_watch - ts)
             if ready_time > 12:
                 print("Ready in ", int(ticker_history[0].get("time") + c.time_to_watch - ts), "s")
-        min, max = [min_price_of_tickers(), max_price_of_tickers()]
-        if (min == max):
-            max *= 0.1
+        if (minprice == maxprice):
+            maxprice *= 0.1
         waitingfor = None
         waitingdetails = ""
 
@@ -240,8 +238,8 @@ def on_ticker(message):
 
             waitingdetails = f"""{buy_vol} @{buy_price} for a total of {buy_cost} &delta: {delta} -> {delta_percent}%"""
 
-        print("Price Range ", c.time_to_watch, "s", "min:", min, "max:", max, "price:", ticker["price"], "Ratio:",
-              round((ticker["price"] - min) / (max - min) * 100), "%",
+        print("Price Range ", c.time_to_watch, "s", "min:", minprice, "max:", maxprice, "price:", ticker["price"], "Ratio:",
+              round((ticker["price"] - minprice) / (maxprice - minprice) * 100), "%",
               "Waiting:", waitingfor if waitingfor else "Nothing", waitingdetails)
     except Exception as rerex:
         print("Error on_ticker : ", rerex)
