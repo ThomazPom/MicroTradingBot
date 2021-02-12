@@ -219,7 +219,7 @@ def on_ticker(message):
                 buy_cost = float(bopen.get("cost"))
                 buy_price = float(bopen.get("descr").get("price"))
                 loss_win_percent=round((float(ticker["price"])/buy_cost-1)*100,1)
-                loss_win=round((float(ticker[price])/buy_cost-1)*buy_cost,1)
+                loss_win=round((float(ticker["price"])/buy_cost-1)*buy_cost,1)
                 waitingdetails = f"""{sell_vol} and win {round(
                     sell_price * sell_vol - buy_cost)}€ @price {sell_price}, @buyprice {buy_price} &delta:  {delta} -> {delta_percent}%, Lw :{loss_win_percent} -> {loss_win}"""
             else:
