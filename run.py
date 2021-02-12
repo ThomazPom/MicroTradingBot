@@ -217,16 +217,16 @@ def on_ticker(message):
                 buy_cost = float(bopen.get("cost"))
                 buy_price = float(bopen.get("descr").get("price"))
                 waitingdetails = f"""{sell_vol} and win {round(
-                    sell_price * sell_vol - buy_cost)}€ @price {sell_price}, @buyprice {buy_price}"""
+                    sell_price * sell_vol - buy_cost)}€ @price {sell_price}, @buyprice {buy_price} &delta: { round(float(ticker["price"]-sell_price),6)}"""
             else:
-                waitingdetails = f'{sell_vol} and win  {round(sell_price * sell_vol - c.invest)}€ @price {sell_price}'
+                waitingdetails = f"""{sell_vol} and win  {round(sell_price * sell_vol - c.invest)}€ @price {sell_price}  &delta: { round(float(ticker["price"]-sell_price),6)}"""
                 pass
         if bopen and bopen.get("vol") and not sopen:
             waitingfor = "buy"
             buy_vol = float(bopen.get("vol"))
             buy_price = float(bopen.get("descr").get("price"))
             buy_cost = round(buy_vol * buy_price)
-            waitingdetails = f"""{buy_vol} @{buy_price} for a total of {buy_cost}"""
+            waitingdetails = f"""{buy_vol} @{buy_price} for a total of {buy_cost} &delta: { round(float(ticker["price"]-buy_price),6)}"""
 
         print("Price Range ", c.time_to_watch, "s", "min:", min, "max:", max, "price:", ticker["price"], "Ratio:",
               round((ticker["price"] - min) / (max - min) * 100), "%",

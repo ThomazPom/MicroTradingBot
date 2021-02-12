@@ -12,4 +12,4 @@ def clone_and_rename(url, src, dest):
 
 
 clone_and_rename("https://github.com/veox/python3-krakenex", "python3-krakenex", "python3krakenex")
-clone_and_rename("https://github.com/websocket-client/websocket-client", "websocket-client", "websocket_client")
+#clone_and_rename("https://github.com/websocket-client/websocket-client", "websocket-client", "websocket_client")

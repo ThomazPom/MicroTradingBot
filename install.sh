@@ -11,7 +11,8 @@ virtualenv -p python3 $VENV_PATH$VENV_NAME --no-download;
 
 
 e "Installation avec PIP" $info $LightBlue $NC
-pip install --upgrade --index-url -r requirements.txt --cert $CERTIFICATE_PATH
+
+pip install --upgrade -r "requirements.txt"
 
 e "Version de python de l'installation :" $info $LightBlue $NC
 python -V;
