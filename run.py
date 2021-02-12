@@ -80,8 +80,9 @@ def decide_order_ticker(ticker, ts, ready,minprice,maxprice):
 
     if ready and not openOrders.get("buy") and not openOrders.get("sell") and c.enable_buys:
         try:
-            if(maxprice-minprice<maxprice*c.minimum_domain_percent_on_observed_tickers*maxprice):
-                     print(f"Domain on observed time is less than {c.minimum_domain_percent_on_observed_tickers*100}%, preventing any buy to be placed - Domain: {minprice-maxprice}/{maxprice}")
+            domain = maxprice-minprice
+            if(domain<maxprice*c.minimum_domain_percent_on_observed_tickers):
+                     print(f"Domain on observed time is less than {c.minimum_domain_percent_on_observed_tickers*100}%, preventing any buy to be placed - Domain: {round(domain)}/{maxprice} ")
                      return;
             price=minprice
             print("Adding buy order: No open order either at sell or buy")
