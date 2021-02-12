@@ -5,7 +5,6 @@ import websocket
 import _thread
 import time
 
-
 class krakenWsClient:
     api_domain_public = "wss://ws.kraken.com/"
     api_domain_private = "wss://ws-auth.kraken.com/"
