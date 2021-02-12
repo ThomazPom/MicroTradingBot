@@ -12,7 +12,7 @@ enable_sells = True
 pair_decimals = -1
 lot_decimals = -1
 asset_pair=None
-minimum_domain_percent_on_observed_tickers=0.005
+minimum_domain_percent_on_observed_tickers=0.0005
 on_cancel_reinvest_number = 1
 
 buy_orders_too_high_file = "buy_orders_too_high.json"
