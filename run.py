@@ -82,6 +82,11 @@ def decide_order_ticker(ticker, ts, ready):
         try:
             price = min_price_of_tickers()
 
+            maxprice = min_price_of_tickers()
+            if(maxprice-minprice<maxprice*c.minimum_domain_percent_on_observed_tickers*maxprice):
+                     print(f"Domain on observed time is less than {c.minimum_domain_percent_on_observed_tickers*100}%, preventing any buy to be placed")
+                     return;
+
             print("Adding buy order: No open order either at sell or buy")
             client.watch({
                 "event": "addOrder",
