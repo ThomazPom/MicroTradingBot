@@ -17,7 +17,7 @@ pp = pprint.pprint
 k = kapi_m.API()
 k.load_key(c.key_file)
 c.ws_token = k.query_private("GetWebSocketsToken").get("result").get("token")
-c.asset_pair = k.query_public("AssetPairs", dict(pair=c.assetpair_no_slash)).get("result").get(c.assetpair_no_slash)
+c.asset_pair = k.query_public("AssetPairs", dict(pair=c.assetpair)).get("result").get(c.assetpair)
 c.pair_decimals = c.asset_pair.get("pair_decimals")
 c.lot_decimals = c.asset_pair.get("lot_decimals")
 ticker_history = []
@@ -213,20 +213,27 @@ def on_ticker(message):
             waitingfor = "sell"
             sell_price = float(sopen.get("descr").get("price"))
             sell_vol = float(sopen.get("vol"))
+            delta = round(float(ticker["price"]-sell_price),5)
+            delta_percent=round(delta/sell_price*100,1)
             if bopen and bopen.get("cost"):
                 buy_cost = float(bopen.get("cost"))
                 buy_price = float(bopen.get("descr").get("price"))
+                loss_win_percent=round((float(ticker["price"])/buy_cost-1)*100,1)
+                loss_win=round((float(ticker[price])/buy_cost-1)*buy_cost,1)
                 waitingdetails = f"""{sell_vol} and win {round(
-                    sell_price * sell_vol - buy_cost)}€ @price {sell_price}, @buyprice {buy_price} &delta: { round(float(ticker["price"]-sell_price),6)}"""
+                    sell_price * sell_vol - buy_cost)}€ @price {sell_price}, @buyprice {buy_price} &delta:  {delta} -> {delta_percent}%, Lw :{loss_win_percent} -> {loss_win}"""
             else:
-                waitingdetails = f"""{sell_vol} and win  {round(sell_price * sell_vol - c.invest)}€ @price {sell_price}  &delta: { round(float(ticker["price"]-sell_price),6)}"""
+                waitingdetails = f"""{sell_vol} and win  {round(sell_price * sell_vol - c.invest)}€ @price {sell_price}  &delta: {delta} -> {delta_percent}%"""
                 pass
         if bopen and bopen.get("vol") and not sopen:
             waitingfor = "buy"
             buy_vol = float(bopen.get("vol"))
             buy_price = float(bopen.get("descr").get("price"))
             buy_cost = round(buy_vol * buy_price)
-            waitingdetails = f"""{buy_vol} @{buy_price} for a total of {buy_cost} &delta: { round(float(ticker["price"]-buy_price),6)}"""
+            delta = round(float(ticker["price"]-buy_price),5)
+            delta_percent=round(delta/buy_price*100,1)
+
+            waitingdetails = f"""{buy_vol} @{buy_price} for a total of {buy_cost} &delta: {delta} -> {delta_percent}%"""
 
         print("Price Range ", c.time_to_watch, "s", "min:", min, "max:", max, "price:", ticker["price"], "Ratio:",
               round((ticker["price"] - min) / (max - min) * 100), "%",

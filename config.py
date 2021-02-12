@@ -1,9 +1,10 @@
 wanted_win = 10
 multiplier_price_win = 0
 use_maxprice = True
-invest = 5000
-assetpairwatch = "XDG/EUR"
-time_to_watch = 30
+invest = 30000
+assetpairwatch = "XBT/EUR"
+assetpair = "XXBTZEUR"
+time_to_watch = 60
 key_file = "key.key"
 ws_token = None
 enable_buys = True
@@ -14,5 +15,4 @@ asset_pair=None
 
 on_cancel_reinvest_number = 1
 
-assetpair_no_slash = assetpairwatch.replace("/", "")
 buy_orders_too_high_file = "buy_orders_too_high.json"
