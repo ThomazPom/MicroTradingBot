@@ -16,8 +16,9 @@ from KrakenWSClient import krakenWsClient
 pp = pprint.pprint
 k = kapi_m.API()
 k.load_key(c.key_file)
-c.ws_token = k.query_private("GetWebSocketsToken").get("result").get("token")
 c.asset_pair = k.query_public("AssetPairs", dict(pair=c.assetpair)).get("result").get(c.assetpair)
+print(k.query_private("GetWebSocketsToken"))
+c.ws_token = k.query_private("GetWebSocketsToken").get("result").get("token")
 c.pair_decimals = c.asset_pair.get("pair_decimals")
 c.lot_decimals = c.asset_pair.get("lot_decimals")
 ticker_history = []
@@ -124,7 +125,7 @@ def decide_order_open_change(tmp_openOrders):
             print("Adding sell order: A buy order has been ", bopen_tmp.get("status"), "at", bopen_tmp.get("avg_price"),
                   "for a cost of", bopen_tmp.get("cost"))
 
-            vol = sum([lorder.get("vol") for lorder in buy_orders_too_high] + [float(bopen_tmp.get("vol"))])
+            vol = sum([float(lorder.get("vol")) for lorder in buy_orders_too_high] + [float(bopen_tmp.get("vol"))])
 
             cost = sum([float(lorder.get("cost")) for lorder in buy_orders_too_high] + [float(bopen_tmp.get("cost"))])
 
