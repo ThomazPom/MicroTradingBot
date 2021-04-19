@@ -1,9 +1,9 @@
-wanted_win = 10
+wanted_win = 50
 multiplier_price_win = 0
 use_maxprice = True
-invest = 30000
-assetpairwatch = "XBT/EUR"
-assetpair = "XXBTZEUR"
+invest = 4000
+assetpairwatch = "XDG/EUR"
+assetpair = "XDGEUR"
 time_to_watch = 60
 key_file = "key.key"
 ws_token = None
