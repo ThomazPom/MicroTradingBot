@@ -6,7 +6,7 @@ from colorama import Fore
 import math
 import websocket
 import functools
-import config as c
+import microtradingConfigStrategy as c
 import functions as f
 import python3krakenex.krakenex.api as kapi_m
 import pprint

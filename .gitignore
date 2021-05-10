@@ -1,7 +1,7 @@
 *.key
 *.json
 python3krakenex
-
+*.log
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
