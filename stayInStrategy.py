@@ -61,7 +61,7 @@ def refresh_assetpairs():
 def tradable_assetpairs(source_crypto, dest_cryptos=None):
     tradable_with = {
         key: val for key, val in c.asset_pairs.items()
-        if source_crypto in val.get("wsname", "")
+        if f'{source_crypto}' in val.get("wsname", "")
            and val.get("wsname").replace(source_crypto, "").replace("/", "") in (dest_cryptos or c.cryptos_to_trade)
     }
     return tradable_with
@@ -75,12 +75,13 @@ def warm_up():
     refresh_assetpairs()
     state.setdefault("current_investment", {})
     state.setdefault("best_balance", {})
-    register_cryptos()
     client.watch({
         "event": "subscribe",
         "subscription": {"name": "ownTrades"}
     }, on_trade, private=True)
     if state.get("current_investment", {}).get("order"):
+
+        register_cryptos()
         open_all_tickers(state.get("crypto_owned"))
     else:
         # Buy for warmup
@@ -94,7 +95,7 @@ orders_to_watch = []
 
 def register_cryptos(erase=False):
     state.setdefault("buy_capability", {})
-    state["greed_boxes"]={}
+    state["greed_boxes"] = {}
     greed_boxes = state.get("greed_boxes")
     buy_capability = state.get("buy_capability")
     for pair in tradable_assetpairs(state.get("crypto_owned")).values():
